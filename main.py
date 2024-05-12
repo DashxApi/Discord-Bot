@@ -57,13 +57,14 @@ async def cmd(ctx: SlashContext):
 
 async def send_webhook_log(ctx):
     webhook_url = os.getenv("WEBHOOK_URL")  # Add your webhook URL here
-    webhook = Webhook.from_url(webhook_url, adapter=AsyncWebhookAdapter(session=bot.session))
+    async with aiohttp.ClientSession() as session:
+        webhook = Webhook.from_url(webhook_url, adapter=AsyncWebhookAdapter(session=session))
 
-    embed = discord.Embed(title="Setup Cmd", color=discord.Color.green())
-    embed.add_field(name="Used by", value=ctx.author.mention)
-    embed.add_field(name="Message", value="**Setup** complete in {}'s server!".format(ctx.guild.name), inline=False)
-    embed.set_footer(text="Powered by Dashx Enterprise")
+        embed = discord.Embed(title="Setup Cmd", color=discord.Color.green())
+        embed.add_field(name="Used by", value=ctx.author.mention)
+        embed.add_field(name="Message", value="**Setup** complete in {}'s server!".format(ctx.guild.name), inline=False)
+        embed.set_footer(text="Powered by Dashx Enterprise")
 
-    await webhook.send(embed=embed)
+        await webhook.send(embed=embed)
 
 bot.run(os.getenv('BOT_TOKEN'))
