@@ -1,20 +1,21 @@
 import os
 import discord
+from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
 from dotenv import load_dotenv
 load_dotenv()
 
-client = discord.Client()
-slash = SlashCommand(client, sync_commands=True)
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
+slash = SlashCommand(bot, sync_commands=True)
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'Logged in as {client.user.name}')
-    await client.change_presence(activity=discord.Game(name="Powered by Dashx Enterprise"))
+    print(f'Logged in as {bot.user.name}')
+    await bot.change_presence(activity=discord.Game(name="Powered by Dashx Enterprise"))
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if message.content.startswith('!ping'):
@@ -47,4 +48,4 @@ async def cmd(ctx: SlashContext):
 
     await webhook_list_channel.send(message_content)
 
-client.run(os.getenv('BOT_TOKEN'))
+bot.run(os.getenv('BOT_TOKEN'))
