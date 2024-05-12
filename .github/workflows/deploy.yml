@@ -26,3 +26,5 @@ jobs:
           
       - name: Run Bot
         run: python main.py
+        env:
+          BOT_TOKEN: MTIzMDgwNzUzNjUxNzUxNzQxNQ.G-aBde.9R691qhcTfMhRnuMa3e4L5fI3pGM90gqFYWyW4
