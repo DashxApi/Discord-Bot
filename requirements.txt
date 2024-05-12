@@ -1,4 +1,4 @@
-discord.py
-discord-py-slash-command
-python_dotenv
+discord.py==1.7.3
+discord-py-slash-command==1.1.1
+python-dotenv
 aiohttp
