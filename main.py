@@ -1,20 +1,24 @@
+import os
 import discord
-from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
 
-bot = commands.Bot(command_prefix="!")
-slash = SlashCommand(bot, sync_commands=True)
+client = discord.Client()
+slash = SlashCommand(client, sync_commands=True)
 
-@bot.event
+@client.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name}')
-    await bot.change_presence(activity=discord.Game(name="Powered by Dashx Enterprise"))
+    print(f'Logged in as {client.user.name}')
+    await client.change_presence(activity=discord.Game(name="Powered by Dashx Enterprise"))
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send('Pong!')
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
 
-@slash.slash(name="cmd",
+    if message.content.startswith('!ping'):
+        await message.channel.send('Pong!')
+
+@slash.slash(name="setup",
              description="Deletes channels & categories, creates new ones, and lists webhook URLs.")
 async def cmd(ctx: SlashContext):
     # Delete existing channels and categories
@@ -41,4 +45,4 @@ async def cmd(ctx: SlashContext):
 
     await webhook_list_channel.send(message_content)
 
-bot.run("MTIzMDgwNzUzNjUxNzUxNzQxNQ.GkFAZe.8rB_WQX_5c1nWzRwgVRHvSLrpmJhlNc5Eyy9Mo")
+client.run(os.getenv('BOT_TOKEN'))
