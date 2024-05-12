@@ -2,13 +2,17 @@ import discord
 from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
 
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
+bot = commands.Bot(command_prefix="!")
 slash = SlashCommand(bot, sync_commands=True)
 
 @bot.event
 async def on_ready():
+    print(f'Logged in as {bot.user.name}')
     await bot.change_presence(activity=discord.Game(name="Powered by Dashx Enterprise"))
-    print(f'Bot is running: {bot.user.name}')
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send('Pong!')
 
 @slash.slash(name="cmd",
              description="Deletes channels & categories, creates new ones, and lists webhook URLs.")
@@ -29,13 +33,12 @@ async def cmd(ctx: SlashContext):
         channel = await ctx.guild.create_text_channel(channel_name, category=webhook_apis_category)
 
     # Get webhook URLs for each channel and send to the command status category
-    embed = discord.Embed(title="Webhook List", description="Dashx Tools", color=discord.Color.blue())
+    webhook_list_channel = await command_status_category.create_text_channel("𝙸𝚗𝚏𝚘")
+    message_content = "Webhook List - Dashx Tools\n"
     for channel in webhook_apis_category.channels:
         for webhook in await channel.webhooks():
-            embed.add_field(name=f"**{channel.name}**", value=f"{webhook.url}\n{webhook.name}", inline=False)
+            message_content += f"**{channel.name}**\n{webhook.url}\n{webhook.name}\n\n"
 
-    # Send the embed to the command status category
-    webhook_list_channel = await command_status_category.create_text_channel("𝙸𝚗𝚏𝚘")
-    await webhook_list_channel.send(embed=embed.set_footer(text="Dashx Tools"))
+    await webhook_list_channel.send(message_content)
 
-bot.run("MTIzMDgwNzUzNjUxNzUxNzQxNQ.G-aBde.9R691qhcTfMhRnuMa3e4L5fI3pGM90gqFYWyW4")
+bot.run("MTIzMDgwNzUzNjUxNzUxNzQxNQ.GkFAZe.8rB_WQX_5c1nWzRwgVRHvSLrpmJhlNc5Eyy9Mo")
