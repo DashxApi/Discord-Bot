@@ -1,0 +1,2 @@
+discord-py-slash-command==2.1.0
+discord.py==1.7.3
