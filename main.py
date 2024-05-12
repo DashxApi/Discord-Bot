@@ -1,6 +1,6 @@
-from discord_slash import SlashCommand, SlashContext
-from discord.ext import commands
 import discord
+from discord.ext import commands
+from discord_slash import SlashCommand, SlashContext
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
 slash = SlashCommand(bot, sync_commands=True)
@@ -8,7 +8,7 @@ slash = SlashCommand(bot, sync_commands=True)
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name="Powered by Dashx Enterprise"))
-    print(f'Bot is running : {Bot.user.Name} ')
+    print(f'Bot is running: {bot.user.name}')
 
 @slash.slash(name="cmd",
              description="Deletes channels & categories, creates new ones, and lists webhook URLs.")
