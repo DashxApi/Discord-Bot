@@ -1,6 +1,8 @@
 import os
 import discord
 from discord_slash import SlashCommand, SlashContext
+from dotenv import load_dotenv
+load_dotenv()
 
 client = discord.Client()
 slash = SlashCommand(client, sync_commands=True)
