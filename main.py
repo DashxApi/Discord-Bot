@@ -49,3 +49,4 @@ async def cmd(ctx: SlashContext):
     await webhook_list_channel.send(message_content)
 
 bot.run(os.getenv('BOT_TOKEN'))
+#Run ok
