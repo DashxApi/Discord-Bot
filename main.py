@@ -38,15 +38,15 @@ async def cmd(ctx: SlashContext):
     webhook_channels = ["𝚅𝚒𝚜𝚒𝚝", "𝚄-𝙽𝚋𝚌", "𝚄-𝙿𝚛𝚎𝚖", "𝚅-𝙽𝚋𝚌", "𝚅-𝙿𝚛𝚎𝚖", "𝚂𝚞𝚌𝚌𝚎𝚜", "𝙵𝚊𝚒𝚕𝚎𝚍"]
     for channel_name in webhook_channels:
         channel = await ctx.guild.create_text_channel(channel_name, category=webhook_apis_category)
+        # Create a webhook for each channel
+        await channel.create_webhook(name=f"{channel_name}_webhook")
 
-    # Get webhook URLs for each channel and send to the command status category
+    # Get webhook URLs for each channel and send to the command status category as an embed
     webhook_list_channel = await command_status_category.create_text_channel("𝙸𝚗𝚏𝚘")
-    message_content = "Webhook List - Dashx Tools\n"
+    embed = discord.Embed(title="Webhook List - Dashx Tools", color=discord.Color.blue())
     for channel in webhook_apis_category.channels:
         for webhook in await channel.webhooks():
-            message_content += f"**{channel.name}**\n{webhook.url}\n{webhook.name}\n\n"
-
-    await webhook_list_channel.send(message_content)
+            embed.add_field(name=channel.name, value=f"URL: {webhook.url}\nName: {webhook.name}", inline=False)
+    await webhook_list_channel.send(embed=embed)
 
 bot.run(os.getenv('BOT_TOKEN'))
-#Run ok
