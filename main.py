@@ -27,11 +27,14 @@ async def on_message(message):
 @slash.slash(name="setup",
              description="Deletes channels & categories, creates new ones, and lists webhook URLs.")
 async def cmd(ctx: SlashContext):
-    # Delete existing channels and categories
-    for category in ctx.guild.categories:
-        await category.delete()
-    for channel in ctx.guild.channels:
-        await channel.delete()
+    try:
+        # Delete existing channels and categories
+        for category in ctx.guild.categories:
+            await category.delete()
+        for channel in ctx.guild.channels:
+            await channel.delete()
+    except discord.errors.NotFound as e:
+        print(f"Error deleting channel: {e}")
 
     # Create new categories
     command_status_category = await ctx.guild.create_category("Command Status")
